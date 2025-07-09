@@ -1,0 +1,19 @@
+# node
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Electron
+/dist
+/out
+*.exe
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+*.log
+.env
+
+.vscode/
+.idea/
