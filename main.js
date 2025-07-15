@@ -2,7 +2,6 @@ const { app,BrowserWindow} = require ('electron');
 const os = require('os'); // Importar el módulo 'os' para obtener información del sistema
 const { ipcMain} = require('electron'); // Importar ipcMain para manejar la comunicación entre procesos
 
-
 // Importar electron-reload para recargar la aplicación automáticamente
 require('electron-reload')
     (__dirname,
@@ -63,12 +62,28 @@ ipcMain.handle('get-ip', () => {
 const express = require('express');
 const appExpress = express();
 
+// Configurar middleware //
+// Servir archivos estáticos desde la carpeta public
+appExpress.use(express.static('public'));
+// Para leer datos JSON automáticamente con UTF-8
+appExpress.use(express.json({ charset: 'utf-8' }));
+// Para leer datos de formularios con tildes
+appExpress.use(express.urlencoded({ extended: true, charset: 'utf-8' }));
+
 const PUERTO = 3000; // Puerto en el que escuchará el servidor Express
 
 appExpress.get('/', (req, res) => {
     res.send('¡Hola! Esta es la app de tu PC, conectada por red local.');
 });
 
+appExpress.post('/enviarDatos', (req, res) => {
+    // Configurar respuesta como UTF-8
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    console.log('Datos recibidos del móvil:', req.body);
+    
+    res.json({message: 'Datos recibidos correctamente'});
+});
 
 appExpress.listen(PUERTO, () => {
     console.log(`Servidor Express escuchando en http://localhost:${PUERTO}`);
