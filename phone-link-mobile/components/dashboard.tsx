@@ -49,31 +49,125 @@ export function Dashboard({ onNavigate, showToast }: DashboardProps) {
       {/* Content */}
       <div className="flex-1 px-6 py-6 space-y-6">
         {/* Connection Status Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="flex items-center space-x-2">
-              <Smartphone className="w-5 h-5 text-gray-600" />
-              <div className="w-4 h-0.5 bg-gray-300"></div>
-              <Monitor className="w-5 h-5 text-gray-600" />
+        <div className="relative bg-gradient-to-br from-white via-white to-blue-50/30 rounded-2xl shadow-lg border border-gray-100 p-6 overflow-hidden hover:shadow-xl transition-all duration-500 group">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-green-500/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
+
+          {/* Connection visualization */}
+          <div className="relative flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              {/* Device connection animation */}
+              <div className="relative flex items-center space-x-3">
+                <div className="relative">
+                  <Smartphone className="w-6 h-6 text-blue-600 transform group-hover:scale-110 transition-transform duration-300" />
+                  <div className="absolute -inset-1 bg-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+
+                {/* Animated connection line */}
+                <div className="relative flex items-center">
+                  <div className="w-8 h-0.5 bg-gradient-to-r from-blue-400 to-green-400 rounded-full"></div>
+                  {isConnected && (
+                    <>
+                      <div className="absolute inset-0 w-8 h-0.5 bg-gradient-to-r from-blue-400 to-green-400 rounded-full animate-pulse"></div>
+                      <div className="absolute left-0 w-2 h-2 bg-blue-400 rounded-full animate-ping opacity-75"></div>
+                      <div className="absolute right-0 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-75 animation-delay-500"></div>
+                    </>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Monitor className="w-6 h-6 text-green-600 transform group-hover:scale-110 transition-transform duration-300" />
+                  <div className="absolute -inset-1 bg-green-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+              </div>
             </div>
-            <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}></div>
+
+            {/* Status indicator with pulse animation */}
+            <div className="relative">
+              <div className={`w-4 h-4 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"} shadow-lg`}></div>
+              {isConnected && (
+                <>
+                  <div className="absolute inset-0 w-4 h-4 bg-green-500 rounded-full animate-ping opacity-30"></div>
+                  <div className="absolute inset-0.5 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                </>
+              )}
+              {!isConnected && (
+                <div className="absolute inset-0 w-4 h-4 bg-red-500 rounded-full animate-pulse opacity-60"></div>
+              )}
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <h2 className="text-lg font-medium text-gray-900">
-              {isConnected ? `Connected to ${pcName}` : "Not Connected"}
-            </h2>
-            <p className="text-gray-600 text-sm">
+          {/* Content with slide-in animation */}
+          <div className="relative space-y-3 transform group-hover:translate-y-[-2px] transition-transform duration-300">
+            <div className="flex items-center space-x-2">
+              <h2 className="text-xl font-semibold text-gray-900 tracking-tight">
+                {isConnected ? `Connected to ${pcName}` : "Not Connected"}
+              </h2>
+              {isConnected && (
+                <div className="flex space-x-1">
+                  <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce"></div>
+                  <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce animation-delay-100"></div>
+                  <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce animation-delay-200"></div>
+                </div>
+              )}
+            </div>
+
+            <p className="text-gray-600 text-sm leading-relaxed">
               {isConnected ? "Your phone is connected to your PC" : "Connect your phone to get started"}
             </p>
+
+            {/* Connection details */}
+            {isConnected && (
+              <div className="flex items-center space-x-4 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="flex items-center space-x-1 text-xs text-green-600">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Secure Connection</span>
+                </div>
+                <div className="flex items-center space-x-1 text-xs text-blue-600">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                  <span>Real-time Sync</span>
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Hover effect overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
         </div>
 
         {/* Welcome Message */}
         {isConnected && (
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Welcome back!</h3>
-            <p className="text-gray-600 text-sm">Share files, photos, and stay connected across your devices.</p>
+          <div className="relative bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 rounded-2xl p-6 border border-blue-100 overflow-hidden group hover:shadow-lg transition-all duration-500">
+            {/* Animated background elements */}
+            <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-400/10 to-transparent rounded-full animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-purple-400/10 to-transparent rounded-full animate-pulse animation-delay-1000"></div>
+
+            {/* Floating particles */}
+            <div className="absolute top-4 right-8 w-1 h-1 bg-blue-400 rounded-full animate-bounce animation-delay-300"></div>
+            <div className="absolute top-8 right-12 w-1 h-1 bg-purple-400 rounded-full animate-bounce animation-delay-700"></div>
+            <div className="absolute bottom-6 left-8 w-1 h-1 bg-indigo-400 rounded-full animate-bounce animation-delay-500"></div>
+
+            <div className="relative z-10 transform group-hover:scale-[1.02] transition-transform duration-300">
+              <div className="flex items-center space-x-2 mb-3">
+                <h3 className="text-xl font-semibold text-gray-900">Welcome back!</h3>
+                <div className="text-2xl animate-bounce">👋</div>
+              </div>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Share files, photos, and stay connected across your devices seamlessly.
+              </p>
+
+              {/* Progress bar animation */}
+              <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <span>Connection strength:</span>
+                  <div className="flex-1 bg-gray-200 rounded-full h-1.5 max-w-24">
+                    <div className="bg-gradient-to-r from-green-400 to-blue-500 h-1.5 rounded-full w-5/6 animate-pulse"></div>
+                  </div>
+                  <span className="text-green-600 font-medium">Excellent</span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
